@@ -25,7 +25,7 @@ import os
 import functools
 import threading
 
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QObject, pyqtSignal
 
 from qutebrowser.api import downloads, message, config
 
@@ -40,18 +40,17 @@ class FakeDownload(downloads.TempDownload):
         self.successful = True
 
 
-class BlocklistDownloads:
+class BlocklistDownloads(QObject):
     """Download blocklists from the given URLs.
+
+    Signals:
+        single_download_finished: Emitted when a single blocklist download
+            completes. Provides the file object.
+        all_downloads_finished: Emitted when all downloads are complete.
+            Provides the count of successfully downloaded files.
 
     Attributes:
         _urls: The URLs to download.
-        _user_cb_single:
-            A user-provided function to be called when a single download has
-            finished. The user is provided with the download object.
-        _user_cb_all:
-            A user-provided function to be called when all downloads have
-            finished. The first argument to the function is the number of
-            items downloaded.
         _in_progress: The DownloadItems which are currently downloading.
         _done_count: How many files have been read successfully.
         _finished_registering_downloads:
@@ -59,18 +58,15 @@ class BlocklistDownloads:
             before all of the block-lists have been added to the download
             queue, we don't call `_on_lists_downloaded`.
         _started: Has the `initiate` method been called?
-        _finished: Has `_user_cb_all` been called?
+        _finished: Has `all_downloads_finished` been emitted?
     """
 
-    def __init__(
-        self,
-        urls: typing.List[QUrl],
-        on_single_download: typing.Callable[[typing.IO[bytes]], typing.Any],
-        on_all_downloaded: typing.Callable[[int], typing.Any],
-    ) -> None:
+    single_download_finished = pyqtSignal(object)
+    all_downloads_finished = pyqtSignal(int)
+
+    def __init__(self, urls: typing.List[QUrl]) -> None:
+        super().__init__()
         self._urls = urls
-        self._user_cb_single = on_single_download
-        self._user_cb_all = on_all_downloaded
 
         self._in_progress = []  # type: typing.List[downloads.TempDownload]
         self._done_count = 0
