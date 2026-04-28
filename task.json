@@ -1,0 +1,18 @@
+{
+  "name": "sbpro-qutebrowser-qutebrowser-e57b6e0e",
+  "kind": "bug-fix",
+  "turns": [
+    "Read TICKET.md, then explore the codebase and fix the issue. The grader will apply your patch inside the official SWE-bench Pro Docker image and run the tests."
+  ],
+  "budget": {
+    "maxTurns": 60,
+    "maxCostUsd": 6,
+    "timeoutMs": 1800000
+  },
+  "successCriteria": "Edits to source files make the fail_to_pass tests pass without regressing pass_to_pass tests, when applied via the SWE-bench Pro grader. Source: instance_qutebrowser__qutebrowser-e57b6e0eeeb656eb2c84d6547d5a0a7333ecee85-v2ef375ac784985212b1805e1d0431dc8f1b3c171",
+  "tags": [
+    "swe-bench-pro",
+    "python",
+    "agentic"
+  ]
+}
