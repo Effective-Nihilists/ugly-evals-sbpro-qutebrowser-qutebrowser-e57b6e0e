@@ -1,0 +1,11 @@
+{
+  "instance_id": "instance_qutebrowser__qutebrowser-e57b6e0eeeb656eb2c84d6547d5a0a7333ecee85-v2ef375ac784985212b1805e1d0431dc8f1b3c171",
+  "repo": "qutebrowser/qutebrowser",
+  "base_commit": "5a7f64ea219f3f008a4b61546ae18820e6780d8e",
+  "dockerhub_tag": "qutebrowser.qutebrowser-qutebrowser__qutebrowser-e57b6e0eeeb656eb2c84d6547d5a0a7333ecee85-v2ef375ac784985212b1805e1d0431dc8f1b3c",
+  "selected_test_files_to_run": "[\"tests/unit/components/test_blockutils.py\"]",
+  "fail_to_pass": "['tests/unit/components/test_blockutils.py::test_blocklist_dl']",
+  "pass_to_pass": "[]",
+  "repo_language": "python",
+  "test_patch": "diff --git a/tests/unit/components/test_blockutils.py b/tests/unit/components/test_blockutils.py\nindex 8c50d9ef4c2..45e3e368ae3 100644\n--- a/tests/unit/components/test_blockutils.py\n+++ b/tests/unit/components/test_blockutils.py\n@@ -53,10 +53,11 @@ def on_all_downloaded(done_count: int) -> None:\n \n     list_qurls = [QUrl(l) for l in pretend_blocklists[0]]\n \n-    dl = blockutils.BlocklistDownloads(\n-        list_qurls, on_single_download, on_all_downloaded\n-    )\n+    dl = blockutils.BlocklistDownloads(list_qurls)\n+    dl.single_download_finished.connect(on_single_download)\n+    dl.all_downloads_finished.connect(on_all_downloaded)\n     dl.initiate()\n+\n     while dl._in_progress:\n         pass\n \n"
+}
