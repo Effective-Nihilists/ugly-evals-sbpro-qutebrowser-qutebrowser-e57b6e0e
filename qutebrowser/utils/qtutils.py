@@ -33,7 +33,10 @@ import operator
 import contextlib
 from typing import TYPE_CHECKING, BinaryIO, IO, Iterator, Optional, Union, cast
 
-import pkg_resources
+try:
+    import pkg_resources
+except ImportError:
+    pkg_resources = None
 from PyQt5.QtCore import (qVersion, QEventLoop, QDataStream, QByteArray,
                           QIODevice, QFileDevice, QSaveFile, QT_VERSION_STR,
                           PYQT_VERSION_STR, QObject, QUrl)
