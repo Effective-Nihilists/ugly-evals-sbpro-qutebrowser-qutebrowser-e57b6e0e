@@ -160,11 +160,9 @@ class BlocklistDownloads(QObject):
             self._done_count += 1
             assert not isinstance(download.fileobj, downloads.UnsupportedAttribute)
             assert download.fileobj is not None
-            try:
-                # Emit the per-download signal
-                self.single_download_finished.emit(download.fileobj)
-            finally:
-                download.fileobj.close()
+            # Emit the per-download signal; the callback owns the fileobj
+            # and is responsible for closing it.
+            self.single_download_finished.emit(download.fileobj)
         if not self._in_progress and self._finished_registering_downloads:
             self._finished = True
             self.all_downloads_finished.emit(self._done_count)
