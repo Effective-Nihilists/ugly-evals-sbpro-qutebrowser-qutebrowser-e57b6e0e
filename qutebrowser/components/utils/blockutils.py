@@ -73,7 +73,7 @@ class BlocklistDownloads(QObject):
         on_all_downloaded: typing.Optional[
             typing.Callable[[int], typing.Any]
         ] = None,
-        parent: QObject = None,
+        parent: typing.Optional[QObject] = None,
     ) -> None:
         super().__init__(parent)
         self._urls = urls
